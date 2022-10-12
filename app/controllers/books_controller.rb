@@ -1,4 +1,6 @@
 class BooksController < ApplicationController
+  rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
+
   def index
     render json: Book.all
   end
@@ -9,10 +11,17 @@ class BooksController < ApplicationController
     if book.save
       render json: book, status: :created 
     else 
-      render json: book.errors, status: :unprocessable_entity
+      render json: book.errors, status: :unprocessable_entity 
     end
 
   end
+
+  def destroy
+    Book.find(params[:id]).destroy!
+
+    head :no_content
+  end
+
 
 
   private   
@@ -21,4 +30,7 @@ class BooksController < ApplicationController
 
     params.require(:book).permit(:title, :author)
   end
+
+
+
 end
