@@ -4,11 +4,13 @@ module Api
       rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
 
       def index
-        render json: Book.all
+        books = Book.all
+          # render json: Book.all
+        render json: BooksRepresenter.new(books).as_json
       end
 
       def create 
-        book = Book.new(book_params )
+        book = Book.new(book_params ) 
         
         if book.save
           render json: book, status: :created 

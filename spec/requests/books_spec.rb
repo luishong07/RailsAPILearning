@@ -6,7 +6,7 @@ describe 'Books API', type: :request do
             FactoryBot.create(:book, title: 'Harry Potter', author: 'JKR')
             FactoryBot.create(:book, title: 'Sandman', author: 'Neil Gaiman')
         end
-        
+         
         it 'returns all books' do
             get '/api/v1/books'
     
