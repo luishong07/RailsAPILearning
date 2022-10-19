@@ -31,6 +31,42 @@ describe 'Books API', type: :request do
                 ]
             )
         end
+
+        it "returns a subset of books based on pagination" do
+            get '/api/v1/books', params: {limit: 1}
+
+            expect(response).to have_http_status(:success)
+            expect(response_body.size).to eq(1)
+            expect(response_body).to eq([
+                {
+                    'id' => 1,
+                    'title' => "Harry Potter",
+                    'author_name' => "J.K. Rowling",
+                    'author_age' => 55 
+                }
+            ])
+        end
+
+        it "returns a subset based on limit and offset" do
+            get '/api/v1/books', params: {limit: 1, offset: 1}
+
+            expect(response).to have_http_status(:success)
+            expect(response_body.size).to eq(1)
+            expect(response_body).to eq([
+                {
+                    'id' => 2,
+                    'title' => "Sandman",
+                    'author_name' => "Neil Gaiman",
+                    'author_age' => 60 
+                } 
+            ])
+
+
+
+
+        end
+
+        
     
     end
 
