@@ -6,14 +6,16 @@ module Api
 
 
             def create
-                p params.require(:username).inspect
+                # p params.require(:username).inspect
                 p params.require(:password).inspect
+                user = User.find_by(username: params.require(:username))
+                token = AuthenticationTokenService.call(user.id)
 
 
-                render json: {token: '123'}, status: :created
+                render json: {token: token}, status: :created
 
 
-            end
+            end 
             private
             def parameter_missing(e)
                 render json: {error: e.message}, status: :unprocessable_entity
