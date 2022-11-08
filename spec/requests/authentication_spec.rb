@@ -2,13 +2,13 @@ require 'rails_helper'
 
 describe 'Authentication', type: :request do
     describe 'POST /authenticate' do 
-        let(:user) {FactoryBot.create(:user, username: 'Person1')}
+        let(:user) {FactoryBot.create(:user, username: 'Person1',password: 'Hello')}
         it 'authenticates the client' do
             post '/api/v1/authenticate', params: {username: user.username, password: "Hello"}
 
             expect(response).to have_http_status(:created)
             expect(response_body).to eq({
-                'token'=> '123'
+                'token'=> 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.DX8mV8mIHYFDlLPJ548JsOcH4IhWoSxU1DysB6KkoGk'
             })
         end
 
@@ -29,6 +29,12 @@ describe 'Authentication', type: :request do
                 'error' => 'param is missing or the value is empty: password'
             })
 
-        end        
+        end  
+        
+        it 'returns error when password is incorrect' do 
+            post '/api/v1/authenticate', params: {username: user.username, password: 'incorrect'}
+
+            expect(response).to have_http_status(:unauthorized)
+        end
     end
 end
