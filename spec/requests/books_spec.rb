@@ -71,7 +71,9 @@ describe 'Books API', type: :request do
     end
 
     describe 'POST /books' do
-        it 'creates a new book' do
+
+        let!(:user){FactoryBot.create(:user, password: "Password1")}
+        it 'creates a new book' do 
             expect { 
                 post '/api/v1/books', params: {
                     book: {title: "The Martian"}, 
@@ -90,6 +92,15 @@ describe 'Books API', type: :request do
                 }
             )
         end
+
+        context 'missing authorization header' do
+            it 'returns a 401 'do
+                post 'api/v1/books', params: {}, headers: {}
+
+                expect(response).to have_http_status(:unauthorized)
+            end
+        end
+
     end
 
     describe 'DELETE /books/:id' do

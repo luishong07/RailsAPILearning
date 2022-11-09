@@ -41,11 +41,11 @@ module Api
       private    
 
       def authenticate_user
-        
+        # binding.irb
         token, _options = token_and_options(request)
         user_id = AuthenticationTokenService.decode(token)
         User.find(user_id)
-      rescue ActiveRecord::RecordNotFound
+      rescue ActiveRecord::RecordNotFound, JWT::DecodeError
           render status: :unauthorized
       end
 

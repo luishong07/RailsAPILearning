@@ -13,6 +13,12 @@ RSpec.describe Api::V1::BooksController, type: :controller do
 
     describe 'POST create' do
         let(:book_name){ "Harry Potter"} 
+        let(:user){FactoryBot.create(:user,password: "Password1")}
+
+        before do
+            allow(AuthenticationTokenService).to receive(:decode).and_return(user.id)
+        end
+
 
         it 'calls updatskujob with correct params' do
             expect(UpdateSkuJob).to receive(:perform_later).with(book_name)
